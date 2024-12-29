@@ -1,75 +1,58 @@
 import java.io.File;
-import java.io.FileReader;
-import java.io.BufferedReader;
-import java.io.IOException;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
+import java.util.Scanner;
 
 public class Main {
-
-    public static void main(String[] args) {
+    public static void main(String[] args) throws FileNotFoundException {
         School school = new School();
-        File fileStudents = new File("src/students.txt");
-        File fileTeachers = new File("src/teachers.txt");
 
-        List<Student> students = readStudentsFromFile(fileStudents);
-        List<Teacher> teachers = readTeachersFromFile(fileTeachers);
+        File file = new File("src/students.txt");
+        Scanner scanner = new Scanner(file);
+        while (scanner.hasNextLine()) {
+            String line = scanner.nextLine();
+            String[] parts = line.split("\\s+");
+            if (parts.length < 5) continue;
 
-        for (Student student : students) {
+            String name = parts[0];
+            String surname = parts[1];
+            int age = Integer.parseInt(parts[2]);
+            boolean gender = parts[3].equalsIgnoreCase("Male");
+            List<Integer> grades = new ArrayList<>();
+            for (int i = 4; i < parts.length; i++) {
+                grades.add(Integer.parseInt(parts[i]));
+            }
+
+            Student student = new Student(name, surname, age, gender, grades);
             school.addMember(student);
         }
 
-        for (Teacher teacher : teachers) {
+        file = new File("src/teachers.txt");
+        Scanner tscanner = new Scanner(file);
+        while (tscanner.hasNextLine()) {
+            String line = tscanner.nextLine();
+            String[] parts = line.split("\\s+");
+            if (parts.length < 7) continue;
+
+            String name = parts[0];
+            String surname = parts[1];
+            int age = Integer.parseInt(parts[2]);
+            boolean gender = parts[3].equalsIgnoreCase("Male");
+            String subject = parts[4];
+            int yearsOfExperience = Integer.parseInt(parts[5]);
+            int salary = Integer.parseInt(parts[6]);
+
+            Teacher teacher = new Teacher(name, surname, age, gender, subject, yearsOfExperience, salary);
+            if (yearsOfExperience > 10) {
+                teacher.giveRaise(10);
+            }
             school.addMember(teacher);
         }
 
+        Collections.sort(school.getMembers(), Comparator.comparing(Person::getSurname));
         System.out.println(school);
-    }
-
-    public static List<Student> readStudentsFromFile(File file) {
-        List<Student> students = new ArrayList<>();
-        try (BufferedReader br = new BufferedReader(new FileReader(file))) {
-            String line;
-            while ((line = br.readLine()) != null) {
-                String[] parts = line.split("\\s+");
-                if (parts.length >= 5) {
-                    String name = parts[0];
-                    String surname = parts[1];
-                    int age = Integer.parseInt(parts[2]);
-                    boolean gender = parts[3].equalsIgnoreCase("Male");
-                    List<Integer> grades = new ArrayList<>();
-                    for (int i = 4; i < parts.length; i++) {
-                        grades.add(Integer.parseInt(parts[i]));
-                    }
-                    students.add(new Student(name, surname, age, gender, grades));
-                }
-            }
-        } catch (IOException e) {
-            System.err.println("Error reading students file: " + e.getMessage());
-        }
-        return students;
-    }
-
-    public static List<Teacher> readTeachersFromFile(File file) {
-        List<Teacher> teachers = new ArrayList<>();
-        try (BufferedReader br = new BufferedReader(new FileReader(file))) {
-            String line;
-            while ((line = br.readLine()) != null) {
-                String[] parts = line.split("\\s+");
-                if (parts.length >= 7) {
-                    String name = parts[0];
-                    String surname = parts[1];
-                    int age = Integer.parseInt(parts[2]);
-                    boolean gender = parts[3].equalsIgnoreCase("Male");
-                    String subject = parts[4];
-                    int yearsOfExperience = Integer.parseInt(parts[5]);
-                    int salary = Integer.parseInt(parts[6]);
-                    teachers.add(new Teacher(name, surname, age, gender, subject, yearsOfExperience, salary));
-                }
-            }
-        } catch (IOException e) {
-            System.err.println("Error reading teachers file: " + e.getMessage());
-        }
-        return teachers;
     }
 }
