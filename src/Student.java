@@ -11,10 +11,6 @@ public class Student extends Person {
         this.grades = grades;
     }
 
-    public int getStudentID() {
-        return studentID;
-    }
-
     public List<Integer> getGrades() {
         return grades;
     }
@@ -23,12 +19,16 @@ public class Student extends Person {
         this.grades = grades;
     }
 
-    public void addGrade(int grade) {
-        grades.add(grade);
+    public double calculateGPA() {
+        int total = 0;
+        for (int grade : grades) {
+            total += grade;
+        }
+        return grades.isEmpty() ? 0 : (double) total / grades.size();
     }
 
-    public double calculateGPA() {
-        return grades.stream().mapToInt(Integer::intValue).average().orElse(0.0);
+    public void addGrade(int grade) {
+        grades.add(grade);
     }
 
     @Override
