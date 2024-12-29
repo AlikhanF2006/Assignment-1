@@ -12,7 +12,7 @@ public class Person {
     }
 
     public String getName() {
-        return this.name;
+        return name;
     }
 
     public void setName(String name) {
@@ -20,7 +20,7 @@ public class Person {
     }
 
     public String getSurname() {
-        return this.surname;
+        return surname;
     }
 
     public void setSurname(String surname) {
@@ -28,7 +28,7 @@ public class Person {
     }
 
     public int getAge() {
-        return this.age;
+        return age;
     }
 
     public void setAge(int age) {
@@ -36,15 +36,16 @@ public class Person {
     }
 
     public boolean isGender() {
-        return this.gender;
+        return gender;
     }
 
     public void setGender(boolean gender) {
         this.gender = gender;
     }
 
+    @Override
     public String toString() {
-        String genderStr = this.gender ? "Male" : "Female";
-        return "Hi, I am " + this.name + " " + this.surname + ", a " + this.age + "-year-old " + genderStr + ".";
+        String genderStr = gender ? "Male" : "Female";
+        return "Hi, I am " + name + " " + surname + ", a " + age + "-year-old " + genderStr + ".";
     }
 }

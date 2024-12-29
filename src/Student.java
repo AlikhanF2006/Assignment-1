@@ -1,4 +1,3 @@
-import java.util.ArrayList;
 import java.util.List;
 
 public class Student extends Person {
@@ -20,19 +19,16 @@ public class Student extends Person {
         this.grades = grades;
     }
 
-    public void addGrade(int grade) {
-        if (grades == null) {
-            grades = new ArrayList<>();
-        }
-        grades.add(grade);
-    }
-
     public double calculateGPA() {
         int total = 0;
         for (int grade : grades) {
             total += grade;
         }
         return grades.isEmpty() ? 0 : (double) total / grades.size();
+    }
+
+    public void addGrade(int grade) {
+        grades.add(grade);
     }
 
     @Override
